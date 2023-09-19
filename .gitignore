@@ -1,0 +1,12 @@
+modules/*
+themes/*
+!modules
+vendor
+.env
+public/theme
+public/assets
+public/storage
+storage/media/*
+storage/cache/*
+storage/log/*
+storage/session/*
