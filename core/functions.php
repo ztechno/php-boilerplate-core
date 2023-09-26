@@ -3,9 +3,10 @@
 use Core\JwtAuth;
 use Core\Session;
 use Core\Utility;
+use Core\Database;
 use Core\Response;
-use Core\TableField;
 use Dotenv\Dotenv;
+use Core\TableField;
 
 if(file_exists(Utility::parentPath() . 'vendor/autoload.php'))
 {
@@ -128,10 +129,10 @@ function url(){
 function auth()
 {
     // mode jwt
-    if(config('auth') == 'jwt')
+    if(app('auth') == 'jwt')
         return JwtAuth::get();
-    if(config('auth') == 'session')
-        return Session::get();
+    if(app('auth') == 'session')
+        return Session::get('auth');
 }
 
 
@@ -405,4 +406,27 @@ function tableFields($tbl = false)
     }
 
     return $tableFields;
+}
+
+function csrf_field()
+{
+    return "<input type='hidden' name='_token' value='".$_SESSION['token']."'>";
+}
+
+function get_role($user_id)
+{
+    $db    = new Database();
+
+    $query = "SELECT user_roles.*, roles.name FROM `user_roles` JOIN roles ON roles.id = user_roles.role_id WHERE user_id=$user_id";
+    $db->query = $query;
+    return $db->exec('single');
+}
+
+function get_roles($user_id)
+{
+    $db    = new Database();
+
+    $query = "SELECT user_roles.*, roles.name FROM `user_roles` JOIN roles ON roles.id = user_roles.role_id WHERE user_id=$user_id";
+    $db->query = $query;
+    return $db->exec('all');
 }

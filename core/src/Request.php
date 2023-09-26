@@ -81,4 +81,37 @@ class Request
         
         return $_GET;
     }
+
+    static function guarding($route)
+    {
+        $modules = getModules();
+        $parent_path = Utility::parentPath();
+        foreach($modules as $module)
+        {
+            $guardFile = $parent_path . $module . "/guards/index.php";
+            if(file_exists($guardFile))
+            {
+                // can access $route in required file
+                require $guardFile;
+            }
+        }
+    }
+
+    static function tokenValidationRouteException()
+    {
+        $routes = [];
+        $modules = getModules();
+        $parent_path = Utility::parentPath();
+        foreach($modules as $module)
+        {
+            $guardFile = $parent_path . $module . "/guards/route-token-validation-exception.php";
+            if(file_exists($guardFile))
+            {
+                // can access $route in required file
+                $routes = array_merge($routes, require $guardFile);
+            }
+        }
+
+        return $routes;
+    }
 }

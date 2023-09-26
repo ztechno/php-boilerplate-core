@@ -9,4 +9,5 @@ return [
     'theme'    => env('APP_THEME'),
     'session_path' => env('APP_SESSION_PATH'),
     'localization' => env('APP_LOCALIZATION'),
+    'auth' => env('APP_AUTH_DRIVER','session'),
 ];

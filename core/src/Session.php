@@ -10,17 +10,22 @@ class Session
         {
             if(isset($_SESSION[$key]))
                 return $_SESSION[$key];
+
+            if($key == 'auth' && isset($_SESSION['user_id']))
+            {
+                $conn = conn();
+                $db   = new Database($conn);
+                $user = $db->single('users',[
+                    'id' => $_SESSION['user_id']
+                ]);
+
+                return $user;
+            }
             return;
         }
+
         $data = $_SESSION;
-        if(isset($data['user_id']))
-        {
-            $conn = conn();
-            $db   = new Database($conn);
-            $data['user'] = $db->single('users',[
-                'id' => $data['user_id']
-            ]);
-        }
+        
         return (new ArrayHelper($data))->toObject();
     }
 
