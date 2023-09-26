@@ -82,13 +82,14 @@ class Request
         return $_GET;
     }
 
-    static function guarding($route)
+    static function guarding($route, $isApiRoute = false)
     {
+        $guardDefaultFile = $isApiRoute ? 'api' : 'index';
         $modules = getModules();
         $parent_path = Utility::parentPath();
         foreach($modules as $module)
         {
-            $guardFile = $parent_path . $module . "/guards/index.php";
+            $guardFile = $parent_path . $module . "/guards/$guardDefaultFile.php";
             if(file_exists($guardFile))
             {
                 // can access $route in required file

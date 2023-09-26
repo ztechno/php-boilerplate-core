@@ -31,9 +31,17 @@ class Bootstrap
         {
             $module = app('default_module') . '/index';
         }
+        
+        // api route
+        $apiPrefix = env('API_PREFIX','api');
+        $isApiRoute = startWith($module, $apiPrefix);
 
+        // guarding or equal middleware in laravel
+        Request::guarding($module, $isApiRoute);
+
+        // csrf validation
         $routeException = Request::tokenValidationRouteException();
-        if(!Request::isMethod('get') && !in_array($module, $routeException))
+        if(!Request::isMethod('get') && !in_array($module, $routeException) && !$isApiRoute)
         {
             
             $validateToken = isset($_POST['_token']) && hash_equals($_SESSION['token'], $_POST['_token']);
@@ -44,17 +52,22 @@ class Bootstrap
             }
         }
         
-        // guarding or equal middleware in laravel
-        Request::guarding($module);
-        
         // explode module
+        $module = $isApiRoute ? str_replace($apiPrefix.'/', '', $module) : $module;
         $moduleData = explode('/', $module);
         
         // 0 => module name
         // 1 to N => process file
         $moduleName = $moduleData[0];
         
-        unset($moduleData[0]);
+        if($isApiRoute)
+        {
+            $moduleData[0] = 'api';
+        }
+        else
+        {
+            unset($moduleData[0]);
+        }
         $processFile = implode('/', $moduleData);
 
         Request::process($moduleName, $processFile);
