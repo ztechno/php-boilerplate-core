@@ -29,6 +29,7 @@ foreach($modules as $module)
     try {
         //code...
         $folder = $module . "/databases/migrations";
+        if(!file_exists($folder)) continue;
         $files = preg_grep('~^migration-.*\.sql$~', scandir($parent_path . $folder));
         
         if(!empty($files))
