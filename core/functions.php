@@ -422,3 +422,68 @@ function get_roles($user_id)
     $db->query = $query;
     return $db->exec('all');
 }
+
+function get_allowed_routes($user_id)
+{
+    $db    = new Database();
+
+    $query = "SELECT role_routes.route_path FROM `user_roles` JOIN roles ON roles.id = user_roles.role_id JOIN role_routes ON role_routes.role_id = user_roles.role_id WHERE user_id=$user_id";
+    $db->query = $query;
+    return $db->exec('all');
+}
+
+function is_allowed($path, $user_id)
+{
+    $ret = false;
+    $allowed_routes = get_allowed_routes($user_id);
+    foreach($allowed_routes as $route)
+    {
+        $route_path = $route->route_path;
+        if(endsWith($route_path, '*'))
+        {
+            $route_path = str_replace('*','',$route_path);
+            if(startWith($path, $route_path))
+            {
+                $ret = true;
+                break;
+            }
+        }
+        elseif($path == $route_path)
+        {
+            $ret = true;
+            break;
+        }
+        elseif(startWith($path,'crud/') && isset($_GET['table']))
+        {
+            $pretty = config('pretty_url');
+            $fullpath = $path . ($pretty ? '?' : '&') . 'table=' . $_GET['table'];
+            if($fullpath == $route_path)
+            {
+                $ret = true;
+                break;
+            }
+        }
+    }
+    return $ret;
+}
+
+function is_item_allowed($items, $user_id)
+{
+    $ret = false;
+    foreach($items as $item)
+    {
+        if(is_allowed(parsePath($item['route']), $user_id))
+        {
+            $ret = true;
+            break;
+        }
+    }
+    return $ret;
+}
+
+function parsePath($url)
+{
+    $url = strtok($url, '?');
+    $app_url = app('url');
+    return trim(str_replace($app_url, '', $url), '/');
+}
