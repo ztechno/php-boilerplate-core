@@ -341,18 +341,10 @@ function view($file, $data = [])
 
 function getModules()
 {
-    $parent_path = Utility::parentPath();
-    $dir = $parent_path . 'modules';
-    $folders = scandir($dir);
-    $modules = [];
-
-    foreach($folders as $folder)
-    {
-        if (!in_array($folder,array(".","..")))
-        {
-            $modules[] = "modules/$folder";
-        }
-    }
+    $modules = explode(',', env('APP_MODULES'));
+    $modules = array_map(function($m){
+        return "modules/$m";
+    }, $modules);
 
     return $modules;
 }
