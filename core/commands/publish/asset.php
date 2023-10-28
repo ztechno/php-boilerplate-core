@@ -22,9 +22,17 @@ foreach($folders as $folder)
     {
         $res = '"'.getcwd() . '/'.$dir.'/'.$folder.'/assets"';
         $dst = '"'.getcwd() . '/public/assets/'.$folder.'"';
-        $cmd = 'ln -s '.$res.' '.$dst;
+        if(!file_exists($dir.'/'.$folder.'/assets')) continue;
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
+        {
+            $cmd = 'mklink /J '.$dst.' '.$res;
+        }
+        else
+        {
+            $cmd = 'ln -s '.$res.' '.$dst;
+        }
         exec($cmd);
-        echo "Exec symlink ".$cmd."\n";
+        echo "Exec ".$cmd."\n";
     }
 }
 die();
