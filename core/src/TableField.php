@@ -18,7 +18,15 @@ class TableField
     function getFields()
     {
         $fields = $this->fields;
-        $hookFile = Utility::parentPath() . "modules/$this->module/hooks/index-fields-$this->tableName.php";
+        $currentRoute  = Request::getRoute();
+
+        // for crud
+        $actionHooks = 'index';
+        if(startWith($currentRoute, 'crud/'))
+        {
+            $actionHooks = str_replace('crud/','', $currentRoute);
+        }
+        $hookFile = Utility::parentPath() . "modules/$this->module/hooks/$actionHooks-fields-$this->tableName.php";
         if(file_exists($hookFile))
         {
             return require $hookFile;
