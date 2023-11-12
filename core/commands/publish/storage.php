@@ -1,6 +1,6 @@
 <?php
 
-if(file_exists('public/theme'))
+if(file_exists('public/storage'))
 {
     exec('rm -rf ' . '"'.getcwd() . '/public/storage"');
     mkdir('public/storage');

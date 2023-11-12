@@ -198,7 +198,12 @@ class Database
     {
         if(is_string($clause))
         {
-            return str_replace("WHERE","",$clause);
+            $pos = strpos($clause, "WHERE");
+            if ($pos !== false && $pos == 0) {
+                return substr_replace($clause, "", $pos, strlen("WHERE"));
+            }
+
+            return $clause;
         }
         $logic = "AND";
         $count_clause = count($clause);

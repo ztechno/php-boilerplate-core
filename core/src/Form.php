@@ -55,11 +55,11 @@ class Form
         $lists = "";
         if(substr($type,0,7) == 'options')
         {
-            $types = explode(':',$type);
-            $options = $types[1];
+            // $types = explode(':',$type);
             
             if(substr($type, 8,3) == 'obj')
             {
+                $options = str_replace('options-obj:','', $type);
                 $obj_array = explode(',',$options);
                 $options = $obj_array[0];
 
@@ -75,9 +75,20 @@ class Form
             }
             else
             {
-                $options = explode('|',$options);
-                foreach($options as $option)
-                    $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
+                $options = str_replace('options:','', $type);
+                if(isJson($options))
+                {
+                
+                    $options = json_decode($options);
+                    foreach($options as $key => $val)
+                        $lists .= "<option value='$val' ".($val==$value?'selected=""':'').">$key</option>";
+                }
+                else
+                {
+                    $options = explode('|',$options);
+                    foreach($options as $option)
+                        $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
+                }
             }
             
             return self::options($name, $lists, $attr);

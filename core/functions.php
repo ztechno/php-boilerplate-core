@@ -441,8 +441,8 @@ function is_allowed($path, $user_id)
         $route_path = $route->route_path;
         if(endsWith($route_path, '*'))
         {
-            $route_path = str_replace('*','',$route_path);
-            if(startWith($path, $route_path))
+            $temp_route_path = str_replace('*','',$route_path);
+            if(startWith($path, $temp_route_path))
             {
                 $ret = true;
                 break;
@@ -453,14 +453,25 @@ function is_allowed($path, $user_id)
             $ret = true;
             break;
         }
-        elseif(startWith($path,'crud/') && isset($_GET['table']))
+        elseif(startWith($path, 'crud/')) // && isset($_GET['table']))
         {
-            $pretty = config('pretty_url');
-            $fullpath = $path . ($pretty ? '?' : '&') . 'table=' . $_GET['table'];
-            if($fullpath == $route_path)
+            $url = "http://test.com/" . $path;
+            $query_str = parse_url($url, PHP_URL_QUERY);
+            if(!$query_str)
             {
-                $ret = true;
-                break;
+                $url .= '?' . http_build_query($_GET);
+                $query_str = parse_url($url, PHP_URL_QUERY);
+            }
+
+            parse_str($query_str, $query_params);
+            if(isset($query_params['table']))
+            {
+                $fullpath = $path . '?table=' . $query_params['table'];
+                if($fullpath == $route_path)
+                {
+                    $ret = true;
+                    break;
+                }
             }
         }
     }
@@ -472,7 +483,8 @@ function is_item_allowed($items, $user_id)
     $ret = false;
     foreach($items as $item)
     {
-        if(is_allowed(parsePath($item['route']), $user_id))
+        $path = parsePath($item['route']);
+        if(is_allowed($path, $user_id))
         {
             $ret = true;
             break;
@@ -483,7 +495,25 @@ function is_item_allowed($items, $user_id)
 
 function parsePath($url)
 {
-    $url = strtok($url, '?');
+    // $url = strtok($url, '?');
     $app_url = app('url');
     return trim(str_replace($app_url, '', $url), '/');
 }
+
+$dir = Utility::parentPath() . 'modules';
+$folders = scandir($dir);
+
+foreach($folders as $folder)
+{
+    if (!in_array($folder,array(".","..")))
+    {
+        $function_file = Utility::parentPath() . 'modules/'. $folder.'/libraries/functions.php';
+        if(!file_exists($function_file)) continue;
+        require $function_file;
+    }
+}
+
+function isJson($string) {
+    json_decode($string);
+    return json_last_error() === JSON_ERROR_NONE;
+ }

@@ -6,8 +6,24 @@ use Core\Database;
 $parent_path = Utility::parentPath();
 
 $db    = new Database();
+$isFreshFlag = isset($argv[2]) ? $argv[2] : '';
 
 try {
+    if($isFreshFlag == '--fresh')
+    {
+        $query = "SELECT CONCAT('DROP TABLE IF EXISTS `', table_name, '`;') as _query
+        FROM information_schema.tables
+        WHERE table_schema = '".env('DB_NAME')."'";
+        $db->query = $query;
+        $allDbName = $db->exec('all');
+
+        foreach($allDbName as $q)
+        {
+            $db->query = "SET foreign_key_checks = 0;".$q->_query;
+            $db->exec('multi_query');
+        }
+    }
+    
     $query = "CREATE TABLE IF NOT EXISTS migrations (
         id INT AUTO_INCREMENT PRIMARY KEY,
         filename VARCHAR(100) NOT NULL,
