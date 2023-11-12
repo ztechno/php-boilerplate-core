@@ -32,20 +32,20 @@ Core Boilerplate New
 - assets -> folder asset
 - config -> folder config
 - lang -> folder lang
-- en -> lang untuk bhs inggris
-- id -> lang untuk bhs indonesia
-- content.php -> localization content
-- label.php -> localization label
-- menu.php -> localization menu
-- menu.php -> structure data menu
-- table-fields.php -> structure data table
+  - en -> lang untuk bhs inggris
+  - id -> lang untuk bhs indonesia
+    - content.php -> localization content
+    - label.php -> localization label
+    - menu.php -> localization menu
+  - menu.php -> structure data menu
+  - table-fields.php -> structure data table
 - databases -> folder keperluan database
-- migrations -> folder keperluan migration
-- migration-{n}.sql -> file migration sql
-- seeders -> folder keperluan seeder
-- {namafileseeder}.sql -> file seeder sql
+  - migrations -> folder keperluan migration
+    - migration-{n}.sql -> file migration sql
+  - seeders -> folder keperluan seeder
+    - {namafileseeder}.sql -> file seeder sql
 - guards -> folder guard untuk kebutuhan sebelum process
-- {processpath}.php -> file guard
+  - {processpath}.php -> file guard
 - hooks -> folder hooks (lihat bagian hooks)
 - libraries -> folder untuk menempatkan class
 - process -> folder process
