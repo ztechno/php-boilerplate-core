@@ -3,10 +3,13 @@
 if(file_exists('public/storage'))
 {
     exec('rm -rf ' . '"'.getcwd() . '/public/storage"');
-    mkdir('public/storage');
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
+    {
+        mkdir('public/storage');
+    }
 }
 
-if(!file_exists('public/storage'))
+if(!file_exists('public/storage') && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
 {
     mkdir('public/storage');
 }
