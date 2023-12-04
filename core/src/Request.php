@@ -84,6 +84,7 @@ class Request
 
     static function guarding($route, $isApiRoute = false)
     {
+        if($route == env('AUTH_AFTER_LOGIN_SUCCESS')) return true;
         $guardDefaultFile = $isApiRoute ? 'api' : 'index';
         $modules = getModules();
         $parent_path = Utility::parentPath();

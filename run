@@ -74,7 +74,7 @@ if(isset($argv[1]))
     if(stringContains($argv[1], ':'))
     {
         $commandQuery = explode(':', $argv[1])[0];
-        if(in_array($commandQuery, ['db','publish','schedulers']))
+        if(in_array($commandQuery, ['db','publish','schedulers','modules']))
         {
             $commandFile = str_replace(':','/', $argv[1]);
             $commandFile = $commandFile ? Utility::parentPath() . "core/commands/$commandFile.php" : null;
