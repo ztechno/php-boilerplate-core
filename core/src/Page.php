@@ -90,4 +90,18 @@ class Page
     {
         return self::$breadcrumbs;
     }
+
+    static function pushHook()
+    {
+        // echo self::$active;
+        // [0] => moduleName, [1] => tableName
+        $active = explode('.', self::$active);
+        $parent_path = Utility::parentPath();
+        $hookFile = $parent_path . "modules/". $active[0] . "/hooks/push-hook-".$active[1].".php";
+
+        if(file_exists($hookFile))
+        {
+            require $hookFile;
+        }
+    }
 }
