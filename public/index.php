@@ -1,7 +1,7 @@
 <?php
 
 //Set the session timeout for 2 seconds
-$timeout = -1;
+$timeout = 3600;
 
 //Set the maxlifetime of the session
 ini_set( "session.gc_maxlifetime", $timeout );
