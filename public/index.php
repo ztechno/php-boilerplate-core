@@ -1,5 +1,15 @@
 <?php
 
+//Set the session timeout for 2 seconds
+$timeout = -1;
+
+//Set the maxlifetime of the session
+ini_set( "session.gc_maxlifetime", $timeout );
+
+//Set the cookie lifetime of the session
+ini_set( "session.cookie_lifetime", $timeout );
+
+
 function my_autoloader($class) {
 
     // explode namespace
