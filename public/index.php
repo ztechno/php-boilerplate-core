@@ -5,6 +5,7 @@ $timeout = 315360000;
 
 //Set the maxlifetime of the session
 ini_set( "session.gc_maxlifetime", $timeout );
+ini_set( "session.gc_probability", 1 );
 
 //Set the cookie lifetime of the session
 ini_set( "session.cookie_lifetime", $timeout );
