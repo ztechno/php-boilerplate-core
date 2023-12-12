@@ -6,7 +6,7 @@ use Core\Utility;
 
 class Scheduler
 {
-    private $scripts = [];
+    private static $scripts = [];
     static function register($file)
     {
         self::$scripts[] = $file;
