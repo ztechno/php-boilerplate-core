@@ -1,6 +1,7 @@
 modules/*
 themes/*
 !modules
+!themes
 vendor
 .env
 public/theme
