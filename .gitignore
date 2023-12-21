@@ -1,7 +1,7 @@
 modules/*
 themes/*
-!modules
-!themes
+!modules/.gitkeep
+!themes/.gitkeep
 vendor
 .env
 public/theme
