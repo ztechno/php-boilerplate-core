@@ -2,14 +2,17 @@
 
 if(file_exists('public/storage'))
 {
-    exec('rm -rf ' . '"'.getcwd() . '/public/storage"');
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
     {
-        mkdir('public/storage');
+        exec('rmdir ' . '"'.getcwd() . '/public/storage"');
+    }
+    else
+    {
+        exec('rm -rf ' . '"'.getcwd() . '/public/storage"');
     }
 }
 
-if(!file_exists('public/storage') && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+if(!file_exists('public/storage') && strtoupper(substr(PHP_OS, 0, 3)) != 'WIN')
 {
     mkdir('public/storage');
 }
