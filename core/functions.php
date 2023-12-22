@@ -287,7 +287,7 @@ function redirectBack($message = [])
     if($message)
     {
         set_flash_msg($message);
-        $url = $_SERVER['HTTP_REFERER']??base_url();
+        $url = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : base_url();
         header('location:'.$url);
         die();
     }
