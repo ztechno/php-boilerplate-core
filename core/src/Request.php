@@ -6,6 +6,18 @@ use Core\Utility;
 
 class Request
 {
+    static public $publicRoutes = [];
+
+    static function addPublicRoute($route)
+    {
+        self::$publicRoutes[] = $route;
+    }
+
+    static function getPublicRoutes()
+    {
+        return self::$publicRoutes;
+    }
+
     static function getRoute()
     {
         $uri = rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/');
