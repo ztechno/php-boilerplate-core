@@ -295,6 +295,7 @@ function redirectBack($message = [])
 
 function asset($file)
 {
+    $file = str_replace('../', '', $file);
     return url() . '/' .$file;
 }
 
