@@ -12,6 +12,6 @@ class Storage
         $dest = $parent_path . 'storage/media/'.$filename;
         copy($file['tmp_name'], $dest);
 
-        return $parent_path . 'storage/' . $filename;
+        return 'storage/' . $filename;
     }
 }
