@@ -2,6 +2,7 @@
 
 return [
     'url'   => env('APP_URL'),
+    'path'  => env('APP_PATH'),
     'name'  => env('APP_NAME'),
     'debug' => env('APP_DEBUG'),
     'default_module' => env('APP_DEFAULT_MODULE'),
