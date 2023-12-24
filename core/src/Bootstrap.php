@@ -25,8 +25,11 @@ class Bootstrap
 
         // request handler
         $module = Request::getRoute();
-        $module = str_replace(app('path'), '', $module);
-        $module = trim($module, '/');
+        if($module)
+        {
+            $module = str_replace(app('path'), '', $module);
+            $module = trim($module, '/');
+        }
         
         if(empty($module))
         {

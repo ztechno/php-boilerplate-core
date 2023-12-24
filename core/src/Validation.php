@@ -68,7 +68,7 @@ class Validation
             $options = $in[1];
             $options = explode(",", $options);
 
-            if(!in_array($data[$key]))
+            if(!in_array($data[$key], $options))
             {
                 return ['status' => false, 'message' => __($key) . ' field must be in '. $in[1]];
             }
