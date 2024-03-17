@@ -527,4 +527,31 @@ foreach($folders as $folder)
 function isJson($string) {
     json_decode($string);
     return json_last_error() === JSON_ERROR_NONE;
- }
+}
+
+
+// $testingTraverse = [
+//     'hello' => [
+//         'world' => 'oke'
+//     ],
+//     'world' => 'oke'
+// ];
+
+// print_r(traverseArray($testingTraverse, 'hello.world', null));
+
+function traverseArray($data, $key, $default)
+{
+    if(strpos($key, ".") !== false)
+    {
+        $keys = explode('.', $key);
+        $mainKey = $keys[0];
+        unset($keys[0]);
+        $keys = implode('.', $keys);
+
+        return isset($data[$mainKey]) ? traverseArray($data[$mainKey], $keys, $default) : $default;
+
+    }
+
+    return isset($data[$key]) ? $data[$key] : $default;
+}
+

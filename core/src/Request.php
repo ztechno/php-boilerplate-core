@@ -74,21 +74,21 @@ class Request
         return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
     }
 
-    static function get($key = false)
+    static function get($key = false, $default = null)
     {
         if($key)
         {
-            return isset($_GET[$key]) ? $_GET['key'] : null;
+            return traverseArray($_GET, $key, $default);
         }
         
         return $_GET;
     }
     
-    static function post($key = false)
+    static function post($key = false, $default = null)
     {
         if($key)
         {
-            return isset($_POST[$key]) ? $_POST['key'] : null;
+            return traverseArray($_POST, $key, $default);
         }
         
         return $_GET;
