@@ -55,7 +55,7 @@ class JwtAuth
 
     static function validateBearerToken()
     {
-        return self::is_valid(getBearerToken());
+        return getBearerToken() && self::is_valid(getBearerToken());
     }
 
     static function is_valid($jwt) {
