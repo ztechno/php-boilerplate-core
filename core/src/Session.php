@@ -13,8 +13,7 @@ class Session
 
             if($key == 'auth' && isset($_SESSION['user_id']))
             {
-                $conn = conn();
-                $db   = new Database($conn);
+                $db   = new Database;
                 $user = $db->single('users',[
                     'id' => $_SESSION['user_id']
                 ]);

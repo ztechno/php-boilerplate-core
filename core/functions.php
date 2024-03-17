@@ -135,6 +135,16 @@ function auth()
         return Session::get('auth');
 }
 
+function jwtAuth()
+{
+    if(getBearerToken())
+    {
+        return JwtAuth::get();
+    }
+
+    return null;
+}
+
 
 function stringContains($string,$val){
     if (strpos($string, $val) !== false) {

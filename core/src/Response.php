@@ -8,6 +8,7 @@ class Response
 {
     static function json($data, $message, $httpStatus = 200)
     {
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($httpStatus);
         echo json_encode([
             'data' => $data,

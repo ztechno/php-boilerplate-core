@@ -6,21 +6,21 @@ class JwtAuth
 {
     static function get()
     {
-        if(isset($_COOKIE[config('jwt_cookie_name')]))
-        {
-            $token = $_COOKIE[config('jwt_cookie_name')];
-            return self::decode($token, config('jwt_secret'));
-        }
+        $token   = getBearerToken();
+        $secret  = env('JWT_SECRET','secret');
+        $decode  = self::decode($token, $secret);
 
-        return [];
+        $db   = new Database;
+        $db->query = "SELECT id, name, username FROM users WHERE id = $decode->user_id";
+        $user = $db->exec('single');
+
+        return $user;
     }
 
-    static function decode($jwt, $secret = 'secret')
+    static function decode($jwt)
     {
         $tokenParts = explode('.', $jwt);
-        $header = base64_decode($tokenParts[0]);
         $payload = base64_decode($tokenParts[1]);
-        $signature_provided = $tokenParts[2];
     
         return json_decode($payload);
     }
@@ -41,34 +41,42 @@ class JwtAuth
     function base64url_encode($str) {
         return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
     }
+    
+    static function base64url_encoder($str) {
+        return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
+    }
 
     function generate($payload)
     {
         $headers = array('alg'=>'HS256','typ'=>'JWT');
-        $secret  = config('jwt_secret');
+        $secret  = env('JWT_SECRET','secret');
         return $this->generate_jwt($headers, $payload, $secret);
     }
 
-    // static function is_valid($jwt, $secret = 'secret') {
-    //     $decode = self::decode($jwt, $secret);
-    
-    //     // check the expiration time - note this will cause an error if there is no 'exp' claim in the jwt
-    //     $expiration = $decode->exp;
-    //     $is_token_expired = ($expiration - time()) < 0;
-    
-    //     // build a signature based on the header and payload using the secret
-    //     $base64_url_header = base64url_encode($header);
-    //     $base64_url_payload = base64url_encode($payload);
-    //     $signature = hash_hmac('SHA256', $base64_url_header . "." . $base64_url_payload, $secret, true);
-    //     $base64_url_signature = base64url_encode($signature);
-    
-    //     // verify it matches the signature provided in the jwt
-    //     $is_signature_valid = ($base64_url_signature === $signature_provided);
+    static function validateBearerToken()
+    {
+        return self::is_valid(getBearerToken());
+    }
+
+    static function is_valid($jwt) {
+        $secret = env('JWT_SECRET','secret');
+        $tokenParts = explode('.', $jwt);
         
-    //     if ($is_token_expired || !$is_signature_valid) {
-    //         return FALSE;
-    //     } else {
-    //         return TRUE;
-    //     }
-    // }
+        if(count($tokenParts) < 3) return false;
+
+        $header = base64_decode($tokenParts[0]);
+        $payload = base64_decode($tokenParts[1]);
+        $signature_provided = $tokenParts[2];
+    
+        // build a signature based on the header and payload using the secret
+        $base64_url_header = self::base64url_encoder($header);
+        $base64_url_payload = self::base64url_encoder($payload);
+        $signature = hash_hmac('SHA256', $base64_url_header . "." . $base64_url_payload, $secret, true);
+        $base64_url_signature = self::base64url_encoder($signature);
+    
+        // verify it matches the signature provided in the jwt
+        $is_signature_valid = ($base64_url_signature === $signature_provided);
+        
+        return $is_signature_valid;
+    }
 }
