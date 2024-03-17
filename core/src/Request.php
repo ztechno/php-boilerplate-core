@@ -7,6 +7,7 @@ use Core\Utility;
 class Request
 {
     static public $publicRoutes = [];
+    static public $isApiRoute   = false;
 
     static function addPublicRoute($route)
     {
@@ -97,6 +98,7 @@ class Request
     static function guarding($route, $isApiRoute = false)
     {
         if($route == env('AUTH_AFTER_LOGIN_SUCCESS')) return true;
+        self::$isApiRoute = $isApiRoute;
         $guardDefaultFile = $isApiRoute ? 'api' : 'index';
         $modules = getModules();
         $parent_path = Utility::parentPath();

@@ -4,6 +4,7 @@ use Core\JwtAuth;
 use Core\Session;
 use Core\Utility;
 use Core\Database;
+use Core\Request;
 use Core\Response;
 use Dotenv\Dotenv;
 use Core\TableField;
@@ -129,7 +130,7 @@ function url(){
 function auth()
 {
     // mode jwt
-    if(app('auth') == 'jwt')
+    if(app('auth') == 'jwt' || Request::$isApiRoute)
         return JwtAuth::get();
     if(app('auth') == 'session')
         return Session::get('auth');
