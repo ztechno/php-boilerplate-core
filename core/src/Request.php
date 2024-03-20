@@ -102,13 +102,17 @@ class Request
         $guardDefaultFile = $isApiRoute ? 'api' : 'index';
         $modules = getModules();
         $parent_path = Utility::parentPath();
+        $activeModule = 'modules/'.explode('/', $route)[1];
         foreach($modules as $module)
         {
-            $guardFile = $parent_path . $module . "/guards/$guardDefaultFile.php";
-            if(file_exists($guardFile))
+            if($module == $activeModule)
             {
-                // can access $route in required file
-                require $guardFile;
+                $guardFile = $parent_path . $module . "/guards/$guardDefaultFile.php";
+                if(file_exists($guardFile))
+                {
+                    // can access $route in required file
+                    require $guardFile;
+                }
             }
         }
     }
