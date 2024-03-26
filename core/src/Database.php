@@ -69,7 +69,17 @@ class Database
         $string = $this->build_clause($clause);
         $string_order = $this->build_order($order);
         if($string)
-            $this->query .= ' WHERE '.$string;
+        {
+            $having = strpos($string, "HAVING");
+            if($having !== false && $having == 0)
+            {
+                $this->query .= ' '. $string;
+            }
+            else
+            {
+                $this->query .= ' WHERE '.$string;
+            }
+        }
         
         if($string_order)
             $this->query .= ' ORDER BY '.$string_order;
@@ -87,7 +97,17 @@ class Database
         $string = $this->build_clause($clause);
         $string_order = $this->build_order($order);
         if($string)
-            $this->query .= ' WHERE '.$string;
+        {
+            $having = strpos($string, "HAVING");
+            if($having !== false && $having == 0)
+            {
+                $this->query .= ' '. $string;
+            }
+            else
+            {
+                $this->query .= ' WHERE '.$string;
+            }
+        }
         
         if($string_order)
             $this->query .= ' ORDER BY '.$string_order;
@@ -102,7 +122,18 @@ class Database
         if($clause)
         {
             $string = $this->build_clause($clause);
-            $this->query .= ' WHERE '.$string;
+            if($string)
+            {
+                $having = strpos($string, "HAVING");
+                if($having !== false && $having == 0)
+                {
+                    $this->query .= ' '. $string;
+                }
+                else
+                {
+                    $this->query .= ' WHERE '.$string;
+                }
+            }
         }
         return $this->exec();
     }
@@ -115,7 +146,17 @@ class Database
         $string = $this->build_clause($clause);
         $string_order = $this->build_order($order);
         if($string)
-            $this->query .= ' WHERE '.$string;
+        {
+            $having = strpos($string, "HAVING");
+            if($having !== false && $having == 0)
+            {
+                $this->query .= ' '. $string;
+            }
+            else
+            {
+                $this->query .= ' WHERE '.$string;
+            }
+        }
         
         if($string_order)
             $this->query .= ' ORDER BY '.$string_order;
