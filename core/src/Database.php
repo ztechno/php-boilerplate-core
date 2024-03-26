@@ -198,6 +198,7 @@ class Database
     {
         if(is_string($clause))
         {
+            $clause = trim($clause);
             $pos = strpos($clause, "WHERE");
             if ($pos !== false && $pos == 0) {
                 return substr_replace($clause, "", $pos, strlen("WHERE"));
