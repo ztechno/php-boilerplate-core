@@ -91,6 +91,9 @@ class Page
         return self::$breadcrumbs;
     }
 
+    /**
+     * for inject hooks file from other file
+     */
     static function pushHook($page = 'index')
     {
         // echo self::$active;
