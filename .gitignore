@@ -7,6 +7,7 @@ vendor
 public/theme
 public/assets
 public/storage
+public/tmp_assets
 storage/media/*
 storage/cache/*
 storage/log/*
