@@ -55,40 +55,49 @@ class Form
         $lists = "";
         if(substr($type,0,7) == 'options')
         {
-            // $types = explode(':',$type);
+            $types = explode(':',$type);
+            $options = $types[1];
             
             if(substr($type, 8,3) == 'obj')
             {
-                $options = str_replace('options-obj:','', $type);
                 $obj_array = explode(',',$options);
                 $options = $obj_array[0];
 
+                $last_params = array_slice($obj_array, 2);
+                $last_params = implode(',',$last_params);
+
+                $clause = explode('|',$last_params);
+                $_clause = [];
+                if(isset($clause[1]))
+                {
+                    $last_params = $clause[0];
+                    $clause = explode(',',$clause[1]);
+
+                    foreach($clause as $k => $c)
+                    {
+                        $n = $k+1;
+                        if($n%2==0) continue;
+                        $_clause[$c] = $clause[$n];
+                    }
+                }
+
                 $conn = conn();
                 $db   = new Database($conn);
-                $datas = $db->all($options);
+                $clause = count($_clause) ? 'WHERE ' . $db->build_clause($_clause) : '';
+                $db->query = "SELECT $obj_array[1] as id, $last_params as value FROM `$options` $clause";
+                $datas = $db->exec('all');
                 $options = $datas;
                 $lists .= "<option value=''>- Pilih -</option>";
                 foreach($options as $option)
                 {
-                    $lists .= "<option value='".$option->{$obj_array[1]}."' ".($option->{$obj_array[1]}==$value?'selected=""':'').">".$option->{$obj_array[2]}."</option>";
+                    $lists .= "<option value='".$option->id."' ".($option->id==$value?'selected=""':'').">".$option->value."</option>";
                 }
             }
             else
             {
-                $options = str_replace('options:','', $type);
-                if(isJson($options))
-                {
-                
-                    $options = json_decode($options);
-                    foreach($options as $key => $val)
-                        $lists .= "<option value='$val' ".($val==$value?'selected=""':'').">$key</option>";
-                }
-                else
-                {
-                    $options = explode('|',$options);
-                    foreach($options as $option)
-                        $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
-                }
+                $options = explode('|',$options);
+                foreach($options as $option)
+                    $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
             }
             
             return self::options($name, $lists, $attr);
