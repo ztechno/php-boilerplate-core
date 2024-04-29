@@ -24,6 +24,7 @@ try {
     // create folder
     mkdir($file);
     mkdir($file . 'assets');
+    file_put_contents($file . 'assets/.gitkeep', '');
 
     mkdir($file . 'config');
 
@@ -44,10 +45,15 @@ try {
     mkdir($file . 'databases/migrations');
     mkdir($file . 'databases/seeders');
     mkdir($file . 'guards');
+    file_put_contents($file . 'guards/.gitkeep', '');
     mkdir($file . 'hooks');
+    file_put_contents($file . 'hooks/.gitkeep', '');
     mkdir($file . 'libraries');
+    file_put_contents($file . 'libraries/.gitkeep', '');
     mkdir($file . 'process');
+    file_put_contents($file . 'process/.gitkeep', '');
     mkdir($file . 'views');
+    file_put_contents($file . 'views/.gitkeep', '');
 
     echo "Module ". $moduleName ." created successfuly\n";
 } catch (\Throwable $th) {
