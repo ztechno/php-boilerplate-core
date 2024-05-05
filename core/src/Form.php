@@ -95,9 +95,20 @@ class Form
             }
             else
             {
-                $options = explode('|',$options);
-                foreach($options as $option)
-                    $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
+                $options = str_replace('options:','', $type);
+                if(isJson($options))
+                {
+
+                    $options = json_decode($options);
+                    foreach($options as $key => $val)
+                        $lists .= "<option value='$val' ".($val==$value?'selected=""':'').">$key</option>";
+                }
+                else
+                {
+                    $options = explode('|',$options);
+                    foreach($options as $option)
+                        $lists .= "<option value='$option' ".($option==$value?'selected=""':'').">$option</option>";
+                }
             }
             
             return self::options($name, $lists, $attr);
