@@ -83,3 +83,19 @@ function loadFile($file)
 
     return "";
 }
+
+function including($file)
+{
+    $parent_path = Utility::parentPath();
+    $file = $parent_path . "/" . $file . ".php";
+    if(file_exists($file))
+    {
+        ob_start();
+
+        require $file;
+        
+        return ob_get_clean();
+    }
+
+    return "";
+}
