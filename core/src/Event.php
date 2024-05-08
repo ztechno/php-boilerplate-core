@@ -26,11 +26,13 @@ class Event {
                     if(is_callable($callback))
                     {
                         $callback($param);
+                        continue;
                     }
 
                     if(is_string($callback))
                     {
                         ($callback)($param);
+                        continue;
                     }
                 } catch (\Throwable $th) {
                     //throw $th;
