@@ -23,7 +23,15 @@ class Event {
             {
                 try {
                     //code...
-                    $callback($param);
+                    if(is_callable($callback))
+                    {
+                        $callback($param);
+                    }
+
+                    if(is_string($callback))
+                    {
+                        ($callback)($param);
+                    }
                 } catch (\Throwable $th) {
                     //throw $th;
                 }
