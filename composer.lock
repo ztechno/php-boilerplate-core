@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f46e066e576013df1bdfdeac515ee82e",
+    "content-hash": "4962b1e9f97c0e522e1385c206ad5b49",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -316,6 +316,60 @@
                 "source": "https://github.com/MarkBaker/PHPMatrix/tree/3.0.1"
             },
             "time": "2022-12-02T22:17:43+00:00"
+        },
+        {
+            "name": "mirazmac/dotenvwriter",
+            "version": "0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MirazMac/DotEnvWriter.git",
+                "reference": "e509d367335c881fb1b1dcae6987c3ebed7d902d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MirazMac/DotEnvWriter/zipball/e509d367335c881fb1b1dcae6987c3ebed7d902d",
+                "reference": "e509d367335c881fb1b1dcae6987c3ebed7d902d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6",
+                "vlucas/phpdotenv": "^5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MirazMac\\DotEnv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Miraz Mac",
+                    "email": "mirazmac@gmail.com",
+                    "homepage": "https://mirazmac.com",
+                    "role": "Original Author"
+                }
+            ],
+            "description": "A PHP library to write values to .env (DotEnv) files",
+            "homepage": "https://mirazmac.com",
+            "keywords": [
+                "dot env",
+                "dot env writer",
+                "env",
+                "environment",
+                "variables"
+            ],
+            "support": {
+                "issues": "https://github.com/MirazMac/DotEnvWriter/issues",
+                "source": "https://github.com/MirazMac/DotEnvWriter/tree/0.4"
+            },
+            "time": "2023-12-09T06:55:35+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",

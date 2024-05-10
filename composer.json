@@ -2,6 +2,7 @@
     "require": {
         "vlucas/phpdotenv": "^5.5",
         "phpoffice/phpspreadsheet": "^1.29",
-        "spipu/html2pdf": "^5.2"
+        "spipu/html2pdf": "^5.2",
+        "mirazmac/dotenvwriter": "^0.4.0"
     }
 }
