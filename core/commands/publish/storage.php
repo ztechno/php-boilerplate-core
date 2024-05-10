@@ -26,7 +26,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
 }
 else
 {
-    $cmd = 'ln -s '.$res.' '.$dst;
+    $cmd = 'ln -s '.$res.'/ '.$dst;
 }
 exec($cmd);
 echo "Exec symlink ".$cmd."\n";
