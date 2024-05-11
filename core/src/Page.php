@@ -78,7 +78,7 @@ class Page
                 {
                     if(isset($menu['route']))
                     {
-                        $path = str_replace(env('APP_URL').'/', '', $menu['route']);
+                        $path = parsePath($menu['route']);
                         if(is_allowed($path, $userId))
                         {
                             $allowedMenu[] = $menu;
@@ -93,7 +93,7 @@ class Page
                             {
                                 if(isset($item['route']))
                                 {
-                                    $path = str_replace(env('APP_URL').'/', '', $item['route']);
+                                    $path = parsePath($item['route']);
                                     if(is_allowed($path, $userId))
                                     {
                                         $allowedItems[] = $item;
