@@ -475,11 +475,13 @@ function is_allowed($path, $user_id)
                 $query_str = parse_url($url, PHP_URL_QUERY);
             }
 
+            
             parse_str($query_str, $query_params);
             if(isset($query_params['table']))
             {
                 $fullpath = $path . '?table=' . $query_params['table'];
-                if($fullpath == $route_path)
+                $fullpath2 = $path . '?' . http_build_query($query_params);
+                if($fullpath == $route_path || $fullpath2 == $route_path)
                 {
                     $ret = true;
                     break;

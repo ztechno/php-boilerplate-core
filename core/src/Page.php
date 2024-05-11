@@ -66,15 +66,59 @@ class Page
         $menus = [];
         $modules = getModules();
         $parent_path = Utility::parentPath();
+        $userId = auth()->id;
         foreach($modules as $module)
         {
             $menuFile = $parent_path . $module . "/config/menu.php";
             if(file_exists($menuFile))
             {
-                $menus[] = [
-                    'moduleName' => str_replace('modules/','',$module),
-                    'menu' => require $menuFile
-                ];
+                $menuData = require $menuFile;
+                $allowedMenu = [];
+                foreach($menuData as $menu)
+                {
+                    if(isset($menu['route']))
+                    {
+                        $path = str_replace(env('APP_URL').'/', '', $menu['route']);
+                        if(is_allowed($path, $userId))
+                        {
+                            $allowedMenu[] = $menu;
+                        }
+                    }
+                    else
+                    {
+                        $allowedItems = [];
+                        if(isset($menu['items']))
+                        {
+                            foreach($menu['items'] as $item)
+                            {
+                                if(isset($item['route']))
+                                {
+                                    $path = str_replace(env('APP_URL').'/', '', $item['route']);
+                                    if(is_allowed($path, $userId))
+                                    {
+                                        $allowedItems[] = $item;
+                                    }
+                                }
+                            }
+
+                            $menu['items'] = $allowedItems;
+                        }
+
+                        if($allowedItems)
+                        {
+                            $allowedMenu[] = $menu;
+                        }
+                    }
+                    
+                }
+
+                if($allowedMenu)
+                {
+                    $menus[] = [
+                        'moduleName' => str_replace('modules/','',$module),
+                        'menu' => $allowedMenu
+                    ];
+                }
             }
         }
 
