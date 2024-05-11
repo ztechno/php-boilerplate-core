@@ -451,18 +451,25 @@ function is_allowed($path, $user_id)
     foreach($allowed_routes as $route)
     {
         $route_path = $route->route_path;
+        $opposite = false;
+        if(startWith($route_path, "!"))
+        {
+            $opposite = true;
+            $route_path = substr($route_path, 1);
+        }
+
         if(endsWith($route_path, '*'))
         {
             $temp_route_path = str_replace('*','',$route_path);
             if(startWith($path, $temp_route_path))
             {
-                $ret = true;
+                $ret = $opposite ? false : true;
                 break;
             }
         }
         elseif($path == $route_path)
         {
-            $ret = true;
+            $ret = $opposite ? false : true;
             break;
         }
         elseif(startWith($path, 'crud/')) // && isset($_GET['table']))
@@ -483,7 +490,7 @@ function is_allowed($path, $user_id)
                 $fullpath2 = $path . '?' . http_build_query($query_params);
                 if($fullpath == $route_path || $fullpath2 == $route_path)
                 {
-                    $ret = true;
+                    $ret = $opposite ? false : true;
                     break;
                 }
             }
