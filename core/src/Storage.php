@@ -8,7 +8,7 @@ class Storage
     {
         $parent_path = Utility::parentPath();
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $originialName = substr($file['name'], 0, 20);
+        $originialName = substr(pathinfo($file['name'], PATHINFO_FILENAME), 0, 20);
         $filename = strtotime('now').'-'.$originialName.'.'.$ext;
         $dest = $parent_path . 'storage/media/'.$filename;
         copy($file['tmp_name'], $dest);
