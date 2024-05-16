@@ -33,6 +33,7 @@ try {
     $db->exec();
 
 } catch (\Throwable $th) {
+    echo "Initiation error\n";
     throw $th;
 }
 
