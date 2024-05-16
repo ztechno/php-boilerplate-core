@@ -84,6 +84,7 @@ foreach($modules as $module)
         
         }
     } catch (\Throwable $th) {
+        echo "Module : ".$module."\n";
         throw $th;
     }
 }
