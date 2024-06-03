@@ -15,4 +15,10 @@ class Storage
 
         return 'storage/' . $filename;
     }
+
+    static function exists($file)
+    {
+        $parent_path = Utility::parentPath();
+        return file_exists($parent_path . 'storage/media/' . $file);
+    }
 }
