@@ -15,6 +15,11 @@ class Database
         $db = config('database');
         $this->connection = $conn ? $conn : conn();
         $this->type = $db['driver'];
+
+        if($this->type == 'mysqli')
+        {
+            $this->connection->set_charset('utf8mb4');
+        }
     }
 
     function get_pk()

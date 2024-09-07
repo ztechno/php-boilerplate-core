@@ -6,6 +6,7 @@ use Core\Utility;
 use Core\Database;
 use Core\Request;
 use Core\Response;
+use Core\Setting;
 use Dotenv\Dotenv;
 use Core\TableField;
 
@@ -565,3 +566,7 @@ function traverseArray($data, $key, $default)
     return isset($data[$key]) ? $data[$key] : $default;
 }
 
+function getSetting($key = false)
+{
+    return Setting::get($key);
+}
