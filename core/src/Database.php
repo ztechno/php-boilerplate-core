@@ -41,7 +41,7 @@ class Database
         $vals = array_values($val);
         $conn = $this->connection;
         $vals = array_map(function($valss) use ($conn) {
-            $valss = $conn->real_escape_string($valss);
+            $valss = $conn->real_escape_string(htmlspecialchars($valss));
             return $valss;
         }, $vals);
         $values = "'".implode("','",$vals)."'";
@@ -267,7 +267,7 @@ class Database
                     $val = $value[1];
                 }
                 if(!in_array(strtoupper($operator),['NOT IN','IN']))
-                    $val = $this->connection->real_escape_string($val);
+                    $val = $this->connection->real_escape_string(htmlspecialchars($val));
                 if(in_array($val,$this->without_quote) || in_array(strtoupper($operator),['NOT IN','IN']))
                 $string .= "$key $operator $val";
                 else
@@ -289,7 +289,7 @@ class Database
         {
             foreach($values as $key => $value)
             {
-                $value = $this->connection->real_escape_string($value);
+                $value = $this->connection->real_escape_string(htmlspecialchars($value));
                 if(in_array($value,$this->without_quote))
                 $string .= "$key=$value";
                 else
