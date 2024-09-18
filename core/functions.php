@@ -570,3 +570,33 @@ function getSetting($key = false)
 {
     return Setting::get($key);
 }
+
+function getSidebarLogo()
+{
+    if(getSetting('application_sidebar_logo'))
+    {
+        return getSetting('application_sidebar_logo');
+    }
+
+    return env('APP_SIDEBAR_LOGO', asset('theme/assets/img/avatars/1.png"'));
+}
+
+function getFavicon()
+{
+    if(getSetting('application_favicon'))
+    {
+        return getSetting('application_favicon');
+    }
+
+    return env('APP_FAVICON', asset('theme/assets/images/favicon.ico'));
+}
+
+function getLogo()
+{
+    if(getSetting('application_logo'))
+    {
+        return getSetting('application_logo');
+    }
+
+    return env('APP_LOGO', asset('theme/assets/images/favicon.ico'));
+}
