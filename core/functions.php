@@ -28,7 +28,7 @@ function app($key, $default = null)
 
 function env($key, $default = null)
 {
-    return isset($_ENV[$key]) ? $_ENV[$key] : $default;
+    return isset($_ENV[$key]) ? $_ENV[$key] : (isset($_SERVER[$key]) ? $_SERVER[$key] : $default);
 }
 
 function config($key)

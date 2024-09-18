@@ -178,7 +178,7 @@ class Database
         return $this->exec();
     }
 
-    function exec($type = false)
+    function exec($type = false, $params = [])
     {
         if($this->type == 'PDO')
         {
@@ -213,24 +213,37 @@ class Database
             {
                 try {
                     //code...
-                    $query_result = $this->connection->query($this->query);
-                    if($query_result)
+                    if(count($params))
                     {
-                        if($type == 'all')
-                            return json_decode(json_encode($query_result->fetch_all(MYSQLI_ASSOC)));
-                        if($type == 'single')
-                            return $query_result->fetch_object();
-                        if($type == 'exists')
-                            return $query_result->num_rows;
-                        if(in_array($type,['insert','update']))
+                        $stmt = $this->connection->prepare($this->query);
+                        foreach($params as $param)
                         {
-                            $last_id = $this->connection->insert_id;
-                            $pk = $this->get_pk();
-                            return $this->single($this->table,[$pk=>$last_id]);
+                            $stmt->bind_param("s", $param);
                         }
-                    }
 
-                    return $query_result;
+                        $stmt->execute();
+                    }
+                    else
+                    {
+                        $query_result = $this->connection->query($this->query);
+                        if($query_result)
+                        {
+                            if($type == 'all')
+                                return json_decode(json_encode($query_result->fetch_all(MYSQLI_ASSOC)));
+                            if($type == 'single')
+                                return $query_result->fetch_object();
+                            if($type == 'exists')
+                                return $query_result->num_rows;
+                            if(in_array($type,['insert','update']))
+                            {
+                                $last_id = $this->connection->insert_id;
+                                $pk = $this->get_pk();
+                                return $this->single($this->table,[$pk=>$last_id]);
+                            }
+                        }
+    
+                        return $query_result;
+                    }
                 } catch (\mysqli_sql_exception $e) {
                     if($this->get_error) return $e->getMessage();
                     echo $e->getMessage();
