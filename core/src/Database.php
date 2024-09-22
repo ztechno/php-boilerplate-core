@@ -41,7 +41,7 @@ class Database
         $vals = array_values($val);
         $conn = $this->connection;
         $vals = array_map(function($valss) use ($conn) {
-            $valss = isJson($valss) ? $valss : htmlspecialchars($valss);
+            // $valss = isJson($valss) ? $valss : htmlspecialchars($valss);
             $valss = $conn->real_escape_string($valss);
             return $valss;
         }, $vals);
@@ -282,7 +282,7 @@ class Database
                 }
                 if(!in_array(strtoupper($operator),['NOT IN','IN']))
                 {
-                    $val = isJson($val) ? $val : htmlspecialchars($val);
+                    // $val = isJson($val) ? $val : htmlspecialchars($val);
                     $val = $this->connection->real_escape_string($val);
                 }
                 if(in_array($val,$this->without_quote) || in_array(strtoupper($operator),['NOT IN','IN']))
@@ -306,7 +306,7 @@ class Database
         {
             foreach($values as $key => $value)
             {
-                $value = isJson($value) ? $value : htmlspecialchars($value);
+                // $value = isJson($value) ? $value : htmlspecialchars($value);
                 $value = $this->connection->real_escape_string($value);
                 if(in_array($value,$this->without_quote))
                 $string .= "$key=$value";
@@ -329,7 +329,7 @@ class Database
         {
             foreach($order as $key => $value)
             {
-                $value = isJson($value) ? $value : htmlspecialchars($value);
+                // $value = isJson($value) ? $value : htmlspecialchars($value);
                 $value = $this->connection->real_escape_string($value);
                 $string .= "$key $value";
                 $last_iteration = !(--$count_order);
