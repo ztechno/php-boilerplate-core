@@ -41,6 +41,7 @@ class Database
         $vals = array_values($val);
         $conn = $this->connection;
         $vals = array_map(function($valss) use ($conn) {
+            // $valss = isJson($valss) ? $valss : htmlspecialchars($valss);
             $valss = $conn->real_escape_string($valss);
             return $valss;
         }, $vals);
@@ -178,7 +179,7 @@ class Database
         return $this->exec();
     }
 
-    function exec($type = false)
+    function exec($type = false, $params = [])
     {
         if($this->type == 'PDO')
         {
@@ -213,24 +214,37 @@ class Database
             {
                 try {
                     //code...
-                    $query_result = $this->connection->query($this->query);
-                    if($query_result)
+                    if(count($params))
                     {
-                        if($type == 'all')
-                            return json_decode(json_encode($query_result->fetch_all(MYSQLI_ASSOC)));
-                        if($type == 'single')
-                            return $query_result->fetch_object();
-                        if($type == 'exists')
-                            return $query_result->num_rows;
-                        if(in_array($type,['insert','update']))
+                        $stmt = $this->connection->prepare($this->query);
+                        foreach($params as $param)
                         {
-                            $last_id = $this->connection->insert_id;
-                            $pk = $this->get_pk();
-                            return $this->single($this->table,[$pk=>$last_id]);
+                            $stmt->bind_param("s", $param);
                         }
-                    }
 
-                    return $query_result;
+                        $stmt->execute();
+                    }
+                    else
+                    {
+                        $query_result = $this->connection->query($this->query);
+                        if($query_result)
+                        {
+                            if($type == 'all')
+                                return json_decode(json_encode($query_result->fetch_all(MYSQLI_ASSOC)));
+                            if($type == 'single')
+                                return $query_result->fetch_object();
+                            if($type == 'exists')
+                                return $query_result->num_rows;
+                            if(in_array($type,['insert','update']))
+                            {
+                                $last_id = $this->connection->insert_id;
+                                $pk = $this->get_pk();
+                                return $this->single($this->table,[$pk=>$last_id]);
+                            }
+                        }
+    
+                        return $query_result;
+                    }
                 } catch (\mysqli_sql_exception $e) {
                     if($this->get_error) return $e->getMessage();
                     echo $e->getMessage();
@@ -267,7 +281,10 @@ class Database
                     $val = $value[1];
                 }
                 if(!in_array(strtoupper($operator),['NOT IN','IN']))
+                {
+                    // $val = isJson($val) ? $val : htmlspecialchars($val);
                     $val = $this->connection->real_escape_string($val);
+                }
                 if(in_array($val,$this->without_quote) || in_array(strtoupper($operator),['NOT IN','IN']))
                 $string .= "$key $operator $val";
                 else
@@ -289,6 +306,7 @@ class Database
         {
             foreach($values as $key => $value)
             {
+                // $value = isJson($value) ? $value : htmlspecialchars($value);
                 $value = $this->connection->real_escape_string($value);
                 if(in_array($value,$this->without_quote))
                 $string .= "$key=$value";
@@ -311,6 +329,7 @@ class Database
         {
             foreach($order as $key => $value)
             {
+                // $value = isJson($value) ? $value : htmlspecialchars($value);
                 $value = $this->connection->real_escape_string($value);
                 $string .= "$key $value";
                 $last_iteration = !(--$count_order);

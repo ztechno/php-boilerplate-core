@@ -28,7 +28,7 @@ function app($key, $default = null)
 
 function env($key, $default = null)
 {
-    return isset($_ENV[$key]) ? $_ENV[$key] : $default;
+    return isset($_ENV[$key]) ? $_ENV[$key] : (isset($_SERVER[$key]) ? $_SERVER[$key] : $default);
 }
 
 function config($key)
@@ -606,4 +606,34 @@ function terbilang($nilai) {
         $hasil = trim(penyebut($nilai));
     }     		
     return $hasil;
+}
+
+function getSidebarLogo()
+{
+    if(getSetting('application_sidebar_logo'))
+    {
+        return getSetting('application_sidebar_logo');
+    }
+
+    return env('APP_SIDEBAR_LOGO', asset('theme/assets/img/avatars/1.png"'));
+}
+
+function getFavicon()
+{
+    if(getSetting('application_favicon'))
+    {
+        return getSetting('application_favicon');
+    }
+
+    return env('APP_FAVICON', asset('theme/assets/images/favicon.ico'));
+}
+
+function getLogo()
+{
+    if(getSetting('application_logo'))
+    {
+        return getSetting('application_logo');
+    }
+
+    return env('APP_LOGO', asset('theme/assets/images/favicon.ico'));
 }

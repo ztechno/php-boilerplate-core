@@ -181,6 +181,17 @@ class Form
                 return $data->{$obj_array[2]};
             }
         }
+
+        if($type == 'date')
+        {
+            return date(app('date_format'), strtotime($index));
+        }
+        
+        if($type == 'datetime-local')
+        {
+            return date(app('datetime_format'), strtotime($index));
+        }
+
         return $index;
     }
 }
