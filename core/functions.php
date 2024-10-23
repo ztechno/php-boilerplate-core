@@ -524,10 +524,12 @@ function parsePath($url)
 
 $dir = Utility::parentPath() . 'modules';
 $folders = scandir($dir);
+$activeModules = env('APP_MODULES');
+$activeModules = explode(',', $activeModules);
 
 foreach($folders as $folder)
 {
-    if (!in_array($folder,array(".","..")))
+    if (!in_array($folder,array(".","..")) && in_array($folder, $activeModules))
     {
         $function_file = Utility::parentPath() . 'modules/'. $folder.'/libraries/functions.php';
         if(!file_exists($function_file)) continue;
