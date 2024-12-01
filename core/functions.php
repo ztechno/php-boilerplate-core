@@ -6,6 +6,7 @@ use Core\Utility;
 use Core\Database;
 use Core\Request;
 use Core\Response;
+use Core\Route;
 use Core\Setting;
 use Dotenv\Dotenv;
 use Core\TableField;
@@ -438,11 +439,7 @@ function get_roles($user_id)
 
 function get_allowed_routes($user_id)
 {
-    $db    = new Database();
-
-    $query = "SELECT role_routes.route_path FROM `user_roles` JOIN roles ON roles.id = user_roles.role_id JOIN role_routes ON role_routes.role_id = user_roles.role_id WHERE user_id=$user_id";
-    $db->query = $query;
-    return $db->exec('all');
+    return Route::allowed_routes($user_id);
 }
 
 function is_allowed($path, $user_id)
