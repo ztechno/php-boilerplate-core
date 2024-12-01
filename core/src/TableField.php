@@ -26,7 +26,16 @@ class TableField
         {
             $actionHooks = str_replace('crud/','', $currentRoute);
         }
+        
+        // will deprecated
         $hookFile = Utility::parentPath() . "modules/$this->module/hooks/$actionHooks-fields-$this->tableName.php";
+        if(file_exists($hookFile))
+        {
+            return require $hookFile;
+        }
+        
+        // new
+        $hookFile = Utility::parentPath() . "modules/$this->module/hooks/$this->tableName/$actionHooks-fields.php";
         if(file_exists($hookFile))
         {
             return require $hookFile;
