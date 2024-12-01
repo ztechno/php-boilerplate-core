@@ -15,7 +15,7 @@ class Route {
      */
     static function additional_allowed_routes($data)
     {
-        self::$allowed_routes[] = $data;
+        self::$allowed_routes[] = json_decode(json_encode($data));
     }
     
     static function allowed_routes($user_id)
@@ -26,7 +26,7 @@ class Route {
         $db->query = $query;
         $allowed_routes = $db->exec('all');
 
-        return array_merge($allowed_routes, self::$allowed_routes);
+        return array_merge(self::$allowed_routes, $allowed_routes);
     }
 
 }

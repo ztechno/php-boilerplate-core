@@ -439,7 +439,8 @@ function get_roles($user_id)
 
 function get_allowed_routes($user_id)
 {
-    return Route::allowed_routes($user_id);
+    $allowed_routes = Route::allowed_routes($user_id);
+    return $allowed_routes;
 }
 
 function is_allowed($path, $user_id)
