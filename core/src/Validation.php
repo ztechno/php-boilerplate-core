@@ -95,6 +95,50 @@ class Validation
                 return ['status' => false, 'message' => __($key) . ' field maximum length is '. $max];
             }
         }
+        
+        if(startWith($rule, 'gte:'))
+        {
+            $min = explode(':', $rule);
+            $min = $min[1];
+
+            if($data[$key] < $min)
+            {
+                return ['status' => false, 'message' => __($key) . ' field must be greater or equal than '. $min];
+            }
+        }
+
+        if(startWith($rule, 'gt:'))
+        {
+            $min = explode(':', $rule);
+            $min = $min[1];
+
+            if($data[$key] <= $min)
+            {
+                return ['status' => false, 'message' => __($key) . ' field must be greater than '. $min];
+            }
+        }
+
+        if(startWith($rule, 'lte:'))
+        {
+            $max = explode(':', $rule);
+            $max = $max[1];
+
+            if($data[$key] > $max)
+            {
+                return ['status' => false, 'message' => __($key) . ' field must be less or equal than '. $max];
+            }
+        }
+
+        if(startWith($rule, 'lt:'))
+        {
+            $max = explode(':', $rule);
+            $max = $max[1];
+
+            if($data[$key] >= $max)
+            {
+                return ['status' => false, 'message' => __($key) . ' field must be less than '. $max];
+            }
+        }
 
         if(startWith($rule, 'exists'))
         {
