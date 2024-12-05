@@ -480,14 +480,13 @@ function is_allowed($path, $user_id)
                 $url .= '?' . http_build_query($_GET);
                 $query_str = parse_url($url, PHP_URL_QUERY);
             }
-
             
             parse_str($query_str, $query_params);
             if(isset($query_params['table']))
             {
                 $fullpath = $path . '?table=' . $query_params['table'];
                 $fullpath2 = $path . '?' . http_build_query($query_params);
-                if($fullpath == $route_path || $fullpath2 == $route_path)
+                if(fnmatch($route_path, $fullpath) || $fullpath == $route_path || $fullpath2 == $route_path)
                 {
                     $ret = $opposite ? false : true;
                     break;
