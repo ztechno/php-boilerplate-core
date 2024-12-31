@@ -29,6 +29,17 @@ class Request
 
         return $route;
     }
+    
+    static function getPrevRoute()
+    {
+        $uri = rtrim(parse_url($_SERVER['HTTP_REFERER'])['path'], '/');
+        
+        $request_uri = strtok($uri, '?');
+        
+        $route = $request_uri != '/' ? trim($request_uri,'/') : false;
+
+        return $route;
+    }
 
     static function process($moduleName, $file)
     {
