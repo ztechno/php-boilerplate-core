@@ -20,7 +20,7 @@ class TableField
         $fields = $this->fields;
         $currentRoute  = Request::getRoute();
 
-        if(isset($fields['_userstamp']) && $currentRoute == 'crud/index')
+        if(isset($fields['_userstamp']) && ($currentRoute == 'crud/index' || $currentRoute == 'api/crud/datatable'))
         {
             $fields['created_at'] = [
                 'label' => __('crud.label.created_at'),
