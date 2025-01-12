@@ -6,6 +6,7 @@ use Core\Utility;
 use Core\Database;
 use Core\Request;
 use Core\Response;
+use Core\Route;
 use Core\Setting;
 use Dotenv\Dotenv;
 use Core\TableField;
@@ -438,11 +439,8 @@ function get_roles($user_id)
 
 function get_allowed_routes($user_id)
 {
-    $db    = new Database();
-
-    $query = "SELECT role_routes.route_path FROM `user_roles` JOIN roles ON roles.id = user_roles.role_id JOIN role_routes ON role_routes.role_id = user_roles.role_id WHERE user_id=$user_id";
-    $db->query = $query;
-    return $db->exec('all');
+    $allowed_routes = Route::allowed_routes($user_id);
+    return $allowed_routes;
 }
 
 function is_allowed($path, $user_id)
@@ -482,14 +480,13 @@ function is_allowed($path, $user_id)
                 $url .= '?' . http_build_query($_GET);
                 $query_str = parse_url($url, PHP_URL_QUERY);
             }
-
             
             parse_str($query_str, $query_params);
             if(isset($query_params['table']))
             {
                 $fullpath = $path . '?table=' . $query_params['table'];
                 $fullpath2 = $path . '?' . http_build_query($query_params);
-                if($fullpath == $route_path || $fullpath2 == $route_path)
+                if(fnmatch($route_path, $fullpath) || $fullpath == $route_path || $fullpath2 == $route_path)
                 {
                     $ret = $opposite ? false : true;
                     break;
@@ -638,4 +635,25 @@ function getLogo()
     }
 
     return env('APP_LOGO', asset('theme/assets/images/favicon.ico'));
+}
+
+function imageToBase64($path)
+{
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+    return $base64;
+}
+
+function curl_get_contents($url)
+{
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+  $data = curl_exec($ch);
+  curl_close($ch);
+  return $data;
 }

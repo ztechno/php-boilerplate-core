@@ -144,7 +144,17 @@ class Page
         // [0] => moduleName, [1] => tableName
         $active = explode('.', self::$active);
         $parent_path = Utility::parentPath();
+
+        // deprecated
         $hookFile = $parent_path . "modules/". $active[0] . "/hooks/push-hook-".$page."-".$active[1].".php";
+
+        if(file_exists($hookFile))
+        {
+            require $hookFile;
+        }
+
+        // new
+        $hookFile = $parent_path . "modules/". $active[0] . "/hooks/$active[1]/push-hook-".$page.".php";
 
         if(file_exists($hookFile))
         {

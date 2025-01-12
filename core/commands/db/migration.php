@@ -40,7 +40,7 @@ try {
 $modules = getModules();
 
 $isRun = false;
-
+$migrationFile = "";
 foreach($modules as $module)
 {
     try {
@@ -66,6 +66,7 @@ foreach($modules as $module)
             foreach($files as $file)
             {
                 if(in_array($file, $all_migrations)) continue;
+                $migrationFile = $file;
         
                 $myfile = fopen($parent_path . $file, "r") or die("Unable to open file!");
                 $query  = fread($myfile,filesize($parent_path . $file));
@@ -86,6 +87,7 @@ foreach($modules as $module)
         }
     } catch (\Throwable $th) {
         echo "Module : ".$module."\n";
+        echo "File : ".$migrationFile."\n";
         throw $th;
     }
 }

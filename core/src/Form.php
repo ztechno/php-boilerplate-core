@@ -98,7 +98,6 @@ class Form
                 $options = str_replace('options:','', $type);
                 if(isJson($options))
                 {
-
                     $options = json_decode($options);
                     foreach($options as $key => $val)
                         $lists .= "<option value='$val' ".($val==$value?'selected=""':'').">$key</option>";
