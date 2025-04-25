@@ -24,19 +24,23 @@ class TableField
         {
             $fields['created_at'] = [
                 'label' => __('crud.label.created_at'),
-                'type' => 'text'
+                'type' => 'text',
+                'search' => $this->tableName .'.created_at'
             ];
             $fields['created_by'] = [
                 'label' => __('crud.label.created_by'),
-                'type' => 'options-obj:users,id,name'
+                'type' => 'options-obj:users,id,name',
+                'search' => $this->tableName .'.created_by'
             ];
             $fields['updated_at'] = [
                 'label' => __('crud.label.updated_at'),
-                'type' => 'text'
+                'type' => 'text',
+                'search' => $this->tableName .'.updated_at'
             ];
             $fields['updated_by'] = [
                 'label' => __('crud.label.updated_by'),
-                'type' => 'options-obj:users,id,name'
+                'type' => 'options-obj:users,id,name',
+                'search' => $this->tableName .'.updated_by'
             ];
 
             unset($fields['_userstamp']);

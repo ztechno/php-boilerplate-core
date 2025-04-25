@@ -71,19 +71,27 @@ class Form
                 if(isset($clause[1]))
                 {
                     $last_params = $clause[0];
-                    $clause = explode(',',$clause[1]);
-
-                    foreach($clause as $k => $c)
+                    if(substr($clause[1], 0, 3) == 'RAW')
                     {
-                        $n = $k+1;
-                        if($n%2==0) continue;
-                        $_clause[$c] = $clause[$n];
+                        $_clause = str_replace('RAW(','',$clause[1]);
+                        $_clause = substr($_clause, 0, -1);
+                    }
+                    else
+                    {
+                        $clause = explode(',',$clause[1]);
+    
+                        foreach($clause as $k => $c)
+                        {
+                            $n = $k+1;
+                            if($n%2==0) continue;
+                            $_clause[$c] = $clause[$n];
+                        }
                     }
                 }
 
                 $conn = conn();
                 $db   = new Database($conn);
-                $clause = count($_clause) ? 'WHERE ' . $db->build_clause($_clause) : '';
+                $clause = !empty($_clause) ? 'WHERE ' . $db->build_clause($_clause) : '';
                 $db->query = "SELECT $obj_array[1] as id, $last_params as value FROM `$options` $clause";
                 $datas = $db->exec('all');
                 $options = $datas;
@@ -142,7 +150,7 @@ class Form
         return "<label style='font-weight:400'>".self::text('checkbox', $name.'[]', $attr)." $label</label><br>";
     }
 
-    static function getData($type, $index)
+    static function getData($type, $index, $field = false)
     {
         if(!$index) return '';
         if(substr($type,0,7) == 'options')

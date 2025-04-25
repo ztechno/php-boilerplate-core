@@ -1,12 +1,6 @@
-modules/*
-themes/*
 !modules/.gitkeep
-!modules/crud
-!modules/auth
-!modules/default
 !themes/.gitkeep
-!themes/sneat
-vendor
+vendor/*
 .env
 public/theme
 public/assets

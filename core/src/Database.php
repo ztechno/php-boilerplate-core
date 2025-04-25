@@ -10,6 +10,7 @@ class Database
     public $table = '';
     public $type = '';
     private $without_quote = ['NULL','TIMESTAMP'];
+    private $fields;
     function __construct($conn = false)
     {
         $db = config('database');
@@ -230,7 +231,12 @@ class Database
                         if($query_result)
                         {
                             if($type == 'all')
+                            {
+                                while ($field = $query_result->fetch_field()) {
+                                    $this->fields[] = $field->name;
+                                }
                                 return json_decode(json_encode($query_result->fetch_all(MYSQLI_ASSOC)));
+                            }
                             if($type == 'single')
                                 return $query_result->fetch_object();
                             if($type == 'exists')
@@ -248,7 +254,7 @@ class Database
                 } catch (\mysqli_sql_exception $e) {
                     if($this->get_error) return $e->getMessage();
                     echo $e->getMessage();
-                    die();
+                    return;
                 }
             }
         }
@@ -339,5 +345,10 @@ class Database
         }
 
         return $string;
+    }
+
+    public function getFields()
+    {
+        return $this->fields;
     }
 }
