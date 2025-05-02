@@ -1,5 +1,9 @@
 !modules/.gitkeep
+!modules/auth/*
+!modules/crud/*
+!modules/default/*
 !themes/.gitkeep
+!themes/sneat/*
 vendor/*
 .env
 public/theme
