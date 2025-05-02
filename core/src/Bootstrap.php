@@ -18,6 +18,8 @@ class Bootstrap
 
         session_start();
 
+        loadModuleFunctions();
+
         // init csrf token
         if (empty($_SESSION['token'])) {
             $_SESSION['token'] = bin2hex(random_bytes(32));
