@@ -519,18 +519,36 @@ function parsePath($url)
     return trim(str_replace($app_url, '', $url), '/');
 }
 
-$dir = Utility::parentPath() . 'modules';
-$folders = scandir($dir);
-$activeModules = env('APP_MODULES');
-$activeModules = explode(',', $activeModules);
+// $dir = Utility::parentPath() . 'modules';
+// $folders = scandir($dir);
+// $activeModules = env('APP_MODULES');
+// $activeModules = explode(',', $activeModules);
 
-foreach($folders as $folder)
+// foreach($folders as $folder)
+// {
+//     if (!in_array($folder,array(".","..")) && in_array($folder, $activeModules))
+//     {
+//         $function_file = Utility::parentPath() . 'modules/'. $folder.'/libraries/functions.php';
+//         if(!file_exists($function_file)) continue;
+//         require $function_file;
+//     }
+// }
+
+function loadModuleFunctions()
 {
-    if (!in_array($folder,array(".","..")) && in_array($folder, $activeModules))
+    $dir = Utility::parentPath() . 'modules';
+    $folders = scandir($dir);
+    $activeModules = env('APP_MODULES');
+    $activeModules = explode(',', $activeModules);
+
+    foreach($folders as $folder)
     {
-        $function_file = Utility::parentPath() . 'modules/'. $folder.'/libraries/functions.php';
-        if(!file_exists($function_file)) continue;
-        require $function_file;
+        if (!in_array($folder,array(".","..")) && in_array($folder, $activeModules))
+        {
+            $function_file = Utility::parentPath() . 'modules/'. $folder.'/libraries/functions.php';
+            if(!file_exists($function_file)) continue;
+            require $function_file;
+        }
     }
 }
 
@@ -656,4 +674,12 @@ function curl_get_contents($url)
   $data = curl_exec($ch);
   curl_close($ch);
   return $data;
+}
+
+function hasRole($user_id, $role)
+{
+    $roles = get_roles($user_id);
+    $roles = $roles ? array_values(array_column($roles, 'name')) : [];
+
+    return in_array($role, $roles);
 }
