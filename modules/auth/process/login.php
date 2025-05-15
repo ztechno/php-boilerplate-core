@@ -19,6 +19,16 @@ if(Request::isMethod('post'))
 
     if($user)
     {
+        $token = bin2hex(random_bytes(32));
+
+        $db->update('users', [
+            'remember_token' => $token
+        ], [
+            'id' => $user->id
+        ]);
+
+        setcookie('remember_token', $token, time() + (86400 * 30), "/", "", false, true); // 30 hari
+        
         Session::set(['user_id'=>$user->id]);
         header('location:'.routeTo(env('AUTH_AFTER_LOGIN_SUCCESS', '/')));
         die();
