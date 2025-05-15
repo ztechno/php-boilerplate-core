@@ -18,6 +18,10 @@ class Session
                     'id' => $_SESSION['user_id']
                 ]);
 
+                $user->profile = $db->single('profile', [
+                    'user_id' => $user->id
+                ]);
+
                 return $user;
             }
             return;
@@ -44,6 +48,7 @@ class Session
 
     static function destroy()
     {
+        setcookie('remember_token', '', time() - 3600, "/");
         session_destroy();
     }
 
