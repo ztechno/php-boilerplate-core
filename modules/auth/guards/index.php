@@ -1,7 +1,22 @@
 <?php
 
+use Core\Database;
+use Core\Session;
+
 $auth = auth();
 $publicRoutes = \Core\Request::getPublicRoutes();
+
+if(empty($auth) && isset($_COOKIE['remember_token']))
+{
+    $db = new Database;
+    $user = $db->single('users', [
+        'remember_token' => $_COOKIE['remember_token']
+    ]);
+
+    Session::set(['user_id'=>$user->id]);
+
+    $auth = auth();
+}
 
 if(empty($auth) && !in_array($route, $publicRoutes))
 {
